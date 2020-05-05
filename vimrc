@@ -69,6 +69,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'akhaku/vim-java-unused-imports'
 " java debugging
 Plugin 'idanarye/vim-vebugger'
+Plugin 'tacsiazuma/easyjava.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
 " if you want ultisnips to be synced by dotfiles, create a symlink from
@@ -214,59 +215,3 @@ let g:ctrlp_custom_ignore = {
             \ 'link': 'some_bad_symbolic_links',
             \ }
 let g:ctrlp_max_files=10000
-fun! s:SetupJavaClass()
-    exe "%s/__CLASS_NAME__/" . expand('%:t:r')
-    exe "%s/__PACKAGE__/" . GetPackageStatement()
-  endfun
-function! GetPackageStatement()
-    return "package " . GetCurrentPackage() . ";"
-endfunction
-function! GetCurrentPackage()
-    let l:projdir = GetJavaProjectDirectory()
-    " echom "PROJDIR:" l:projdir
-
-    let l:filedir = expand("%:p:h")
-    " echom "FILEDIR:" l:filedir
-
-    " Chop off the project directory prefix of of the current working
-    " directory.
-    let l:fullpath = substitute(l:filedir, l:projdir, "", "")
-    " echom "FULLPATH:" l:fullpath
-
-    " Chop off the /src/main/java prefix
-    let l:path = substitute(l:fullpath, 'src/\(main\|test\)/java', '', '')
-    " echom "PATH2:" l:path
-
-    " Chop off leading /
-    let l:path = substitute(l:path, '^[/]*', '', '')
-    " echom "PATH1:" l:path
-
-    " Replace slashes with periods.
-    let l:package = substitute(l:path, '/', '.', 'g')
-    " echom "PACKAGE:" l:package
-
-    return l:package
-endfunction
-function! GetJavaProjectDirectory()
-    let pomFile = GetPomFile(getcwd())
-    if strlen(l:pomFile) > 0
-        return fnamemodify(l:pomFile, ':h')
-    else
-        return 0
-    endif
-endfunction
-function! GetPomFile(pwd)
-    if a:pwd ==# "\/"
-        return 0
-    else
-        let l:fn = a:pwd . "/pom.xml"
-
-        if filereadable(expand(l:fn))
-            return l:fn
-        else
-            let l:parent = fnamemodify(a:pwd, ':h')
-            return GetPomFile(l:parent)
-        endif
-    endif
-endfunction
-autocmd BufRead *.java if getfsize(expand('%'))==0|$r ~/.vim/templates/skeleton.java|call s:SetupJavaClass()|endif
