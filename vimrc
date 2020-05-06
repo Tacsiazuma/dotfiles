@@ -2,6 +2,7 @@ set nocompatible              " be iMproved, required
 syntax enable
 " turn on linenumbers
 set number
+set relativenumber
 let mapleader=','
 set guifont=Hack:h20
 set nobackup
