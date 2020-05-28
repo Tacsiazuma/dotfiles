@@ -6,17 +6,27 @@ set relativenumber
 let mapleader=','
 set guifont=Hack:h20
 set nobackup
+set colorcolumn=121
+set noswapfile
 set nowritebackup
 set cmdheight=2
 filetype off                  " required
 set clipboard+=unnamedplus " use system clipboard
 
+nnoremap : .
+nnoremap . :
 set autowrite " save when buffer changed
 noremap <c-s> :w<CR> " normal mode: save
 inoremap <c-s> <Esc>:w<CR>l " insert mode: escape to normal and save
 vnoremap <c-s> <Esc>:w<CR> " visual mode: escape to normal and save
 " terminal escape
 tnoremap <Esc> <C-\><C-n>
+" spell checking hungarian
+augroup markdownSpell
+    autocmd!
+    autocmd FileType markdown setlocal spell spelllang=hu
+    autocmd BufRead,BufNewFile *.md setlocal spell spelllang=hu
+augroup END
 " to convert 4 spaces to tabs and vice-versa
 set tabstop=4
 set shiftwidth=4
@@ -60,6 +70,8 @@ Plugin 'lfilho/cosco.vim'
 Plugin 'kien/ctrlp.vim'
 " markdown preview
 Plugin 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+" generic refactoring plugin
+Plugin 'apalmer1377/factorus'
 " git changes
 Plugin 'airblade/vim-gitgutter'
 " vim search in files
@@ -73,6 +85,7 @@ Plugin 'idanarye/vim-vebugger'
 Plugin 'tacsiazuma/easyjava.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
+Plugin 'sedm0784/vim-you-autocorrect'
 " if you want ultisnips to be synced by dotfiles, create a symlink from
 " .ultisnips to .vim/UltiSnips because we cant read outside the .vim directory
 Plugin 'SirVer/ultisnips'
@@ -83,11 +96,21 @@ filetype plugin indent on    " required
 " Gruvbox theme config
 " =====================================================
 colorscheme gruvbox
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"
+"inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? coc#_select_confirm() :
+"      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
 
 function! s:check_back_space() abort
     let col = col('.') - 1
