@@ -1,2 +1,2 @@
 clear mod1
-add mod5 = Alt_L
+keycode 64 = ISO_Level3_Shift

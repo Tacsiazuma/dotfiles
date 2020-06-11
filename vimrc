@@ -38,7 +38,6 @@ set list
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-"Plugin 'Sirver/ultisnips'
 Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 " vim outlines from coc
 Plugin 'liuchengxu/vista.vim'
@@ -81,14 +80,14 @@ Plugin 'editorconfig/editorconfig-vim'
 " remove unused imports in java
 Plugin 'akhaku/vim-java-unused-imports'
 " java debugging
-Plugin 'idanarye/vim-vebugger'
 Plugin 'tacsiazuma/easyjava.vim'
+Plugin 'Dica-Developer/vim-jdb'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'sedm0784/vim-you-autocorrect'
 " if you want ultisnips to be synced by dotfiles, create a symlink from
 " .ultisnips to .vim/UltiSnips because we cant read outside the .vim directory
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -101,9 +100,9 @@ colorscheme gruvbox
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 "
 "inoremap <silent><expr> <TAB>
@@ -125,9 +124,9 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
+            \   "function": "\uf794",
+            \   "variable": "\uf71b",
+            \  }
 let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
@@ -158,14 +157,6 @@ let test#strategy = "dispatch"
 "open nerdtree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" close vim when nerdtree is the last window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" nerdtree cd into dir when opening it
-let g:NERDTreeChDirMode = 2
-"if more than one window and previous buffer was NERDTree, go back to it.
-autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
-" airline configs
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
 " ==============================================
@@ -176,6 +167,7 @@ noremap <F3> :exec 'UnusedImportsRemove'<bar>Autoformat<CR>
 command! -nargs=0 Format :call CocAction('format')<Paste>
 " format selected section
 xmap <leader>f  <Plug>(coc-format-selected)<CR>
+nmap <leader>rn  <Plug>(coc-rename)<CR>
 nmap <leader>f  <Plug>(coc-format-selected)<CR>
 nmap <silent> [g <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]g <Plug>(coc-diagnostic-next)<CR>
@@ -236,6 +228,6 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.jar
 let g:ctrlp_custom_ignore = {
             \ 'dir': '\v[\/](\.(git|hg|svn)|Pictures|node_modules|Downloads|Movies|Videos|target)$',
             \ 'file': '\v\.(png|gif|jpg|wav|torrent|flv|zip|exe|so|dll|class|jar)$',
-            \ 'link': 'some_bad_symbolic_links',
-            \ }
+            \ 'link': 'some_bad_symbolic_links'
+            \}
 let g:ctrlp_max_files=10000
