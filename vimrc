@@ -3,7 +3,7 @@ syntax enable
 " turn on linenumbers
 set number
 set relativenumber
-let mapleader=','
+let mapleader=' '
 set guifont=Hack:h20
 set nobackup
 set colorcolumn=121
@@ -19,6 +19,11 @@ set autowrite " save when buffer changed
 noremap <c-s> :w<CR> " normal mode: save
 inoremap <c-s> <Esc>:w<CR>l " insert mode: escape to normal and save
 vnoremap <c-s> <Esc>:w<CR> " visual mode: escape to normal and save
+" movement between panes
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>l :wincmd l<CR>
 " terminal escape
 tnoremap <Esc> <C-\><C-n>
 " spell checking hungarian
@@ -47,6 +52,7 @@ Plugin 'preservim/nerdtree'
 Plugin 'Chiel92/vim-autoformat'
 " git markdown table mode
 Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'idanarye/vim-vebugger'
 " git plugin
 Plugin 'tpope/vim-fugitive'
 " see registers before using them
@@ -84,7 +90,7 @@ Plugin 'tacsiazuma/easyjava.vim'
 Plugin 'Dica-Developer/vim-jdb'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
-Plugin 'sedm0784/vim-you-autocorrect'
+Plugin 'mbbill/undotree'
 " if you want ultisnips to be synced by dotfiles, create a symlink from
 " .ultisnips to .vim/UltiSnips because we cant read outside the .vim directory
 "Plugin 'SirVer/ultisnips'
@@ -104,12 +110,6 @@ inoremap <silent><expr> <TAB>
             \ <SID>check_back_space() ? "\<TAB>" :
             \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-"
-"inoremap <silent><expr> <TAB>
-"      \ pumvisible() ? coc#_select_confirm() :
-"      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"      \ <SID>check_back_space() ? "\<TAB>" :
-"      \ coc#refresh()
 
 function! s:check_back_space() abort
     let col = col('.') - 1
@@ -129,8 +129,6 @@ let g:vista#renderer#icons = {
             \  }
 let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
-" =====================================================
-" own commands
 " =====================================================
 " vim test to run with maven toggles
 nnoremap <C-t> :TestFile -DfailIfNoTests=false -am -q<CR>
@@ -154,11 +152,21 @@ let g:test#transformation = 'maven_integration_aware_test'
 " vim-test config
 let test#strategy = "dispatch"
 
+" ==============================================
+" nerdtree config
+" ==============================================
 "open nerdtree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-let g:airline_powerline_fonts = 1
+" ==============================================
+" undotree   config
+" ==============================================
+nnoremap <leader>u :UndoTreeShow<CR>
+" ==============================================
+" airline config
+" ==============================================
 
+let g:airline_powerline_fonts = 1
 " ==============================================
 " CoC config
 " ==============================================
@@ -220,6 +228,11 @@ let g:ale_linters = {
             \}
 let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools/src/main/resources/checkstyle.xml'
 
+" ==============================================
+" CtrlP config
+" ==============================================
+" set g
+set g:vebugger_leader='<leader>d'
 " ==============================================
 " CtrlP config
 " ==============================================
