@@ -229,10 +229,9 @@ let g:ale_linters = {
 let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools/src/main/resources/checkstyle.xml'
 
 " ==============================================
-" CtrlP config
+" vebugger config
 " ==============================================
-" set g
-set g:vebugger_leader='<leader>d'
+let g:vebugger_leader='<leader>d'
 " ==============================================
 " CtrlP config
 " ==============================================
