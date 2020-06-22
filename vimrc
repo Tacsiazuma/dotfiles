@@ -10,9 +10,12 @@ set colorcolumn=121
 set noswapfile
 set nowritebackup
 set cmdheight=2
+set hidden
 filetype off                  " required
 set clipboard+=unnamedplus " use system clipboard
-
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 nnoremap : .
 nnoremap . :
 set autowrite " save when buffer changed
@@ -49,9 +52,6 @@ Plugin 'liuchengxu/vista.vim'
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree'
-Plugin 'Chiel92/vim-autoformat'
-" git markdown table mode
-Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'idanarye/vim-vebugger'
 " git plugin
 Plugin 'tpope/vim-fugitive'
@@ -71,23 +71,19 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'janko/vim-test'
 " semicolon and colon addition to the end of the lines, etc.
 Plugin 'lfilho/cosco.vim'
+Plugin 'tpope/vim-commentary'
+" vim practice plugin
+Plugin 'ThePrimeagen/vim-be-good'
 " fuzzy finder
 Plugin 'kien/ctrlp.vim'
 " markdown preview
 Plugin 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-" generic refactoring plugin
-Plugin 'apalmer1377/factorus'
 " git changes
 Plugin 'airblade/vim-gitgutter'
 " vim search in files
 Plugin 'mileszs/ack.vim'
-" editorconfig support
-Plugin 'editorconfig/editorconfig-vim'
-" remove unused imports in java
-Plugin 'akhaku/vim-java-unused-imports'
 " java debugging
 Plugin 'tacsiazuma/easyjava.vim'
-Plugin 'Dica-Developer/vim-jdb'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'mbbill/undotree'
@@ -155,30 +151,28 @@ let test#strategy = "dispatch"
 " ==============================================
 " nerdtree config
 " ==============================================
+" nerdree cd to directory opened automatically
+let g:NERDTreeChDirMode = 2
 "open nerdtree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " ==============================================
 " undotree   config
 " ==============================================
-nnoremap <leader>u :UndoTreeShow<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
 " ==============================================
 " airline config
 " ==============================================
-
 let g:airline_powerline_fonts = 1
 " ==============================================
 " CoC config
 " ==============================================
-noremap <F3> :exec 'UnusedImportsRemove'<bar>Autoformat<CR>
 " format selected buffer
 command! -nargs=0 Format :call CocAction('format')<Paste>
 " format selected section
-xmap <leader>f  <Plug>(coc-format-selected)<CR>
+"xmap <leader>f  <Plug>(coc-format-selected)<CR>
 nmap <leader>rn  <Plug>(coc-rename)<CR>
-nmap <leader>f  <Plug>(coc-format-selected)<CR>
-nmap <silent> [g <Plug>(coc-diagnostic-prev)<CR>
-nmap <silent> ]g <Plug>(coc-diagnostic-next)<CR>
+nmap <leader>f  <Plug>(coc-format)<CR>
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)<CR>
@@ -195,10 +189,10 @@ nmap <leader>rn <Plug>(coc-rename)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)<CR>
-nmap <silent> gy <Plug>(coc-type-definition)<CR>
-nmap <silent> gi <Plug>(coc-implementation)<CR>
-nmap <silent> gr <Plug>(coc-references)<CR>
+nmap <silent> gd <Plug>(coc-type-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Show commands.
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
@@ -211,9 +205,17 @@ function! s:show_documentation()
         call CocAction('doHover')
     endif
 endfunction
+" ==============================================
+" Cosco config
+" ==============================================
+autocmd FileType javascript,css,java nmap <silent> <Leader>, <Plug>(cosco-commaOrSemiColon)
 " cycle through buffers
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+" ==============================================
+" Auto pairs config
+" ==============================================
+let g:AutoPairsMapSpace = 0
 " ==============================================
 " ACK config
 " ==============================================
