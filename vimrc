@@ -164,6 +164,7 @@ nnoremap <leader>u :UndotreeToggle<CR>
 " airline config
 " ==============================================
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 " ==============================================
 " CoC config
 " ==============================================
