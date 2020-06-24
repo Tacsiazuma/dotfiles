@@ -2,6 +2,8 @@ set nocompatible              " be iMproved, required
 syntax enable
 " turn on linenumbers
 set number
+set ttimeout
+set ttimeoutlen=100
 set relativenumber
 let mapleader=' '
 set guifont=Hack:h20
