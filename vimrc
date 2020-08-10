@@ -1,4 +1,4 @@
-set nocompatible              " be iMproved, required
+set nocompatible              " be 
 syntax enable
 " turn on linenumbers
 set number
@@ -57,6 +57,8 @@ Plugin 'preservim/nerdtree'
 Plugin 'idanarye/vim-vebugger'
 " git plugin
 Plugin 'tpope/vim-fugitive'
+" git merge plugin
+Plugin 'idanarye/vim-merginal'
 " see registers before using them
 Plugin 'junegunn/vim-peekaboo'
 " linter
@@ -70,7 +72,7 @@ Plugin 'vim-airline/vim-airline'
 " airline themes
 Plugin 'vim-airline/vim-airline-themes'
 " testing plugin
-Plugin 'janko/vim-test'
+Plugin 'vim-test/vim-test'
 " semicolon and colon addition to the end of the lines, etc.
 Plugin 'lfilho/cosco.vim'
 Plugin 'tpope/vim-commentary'
