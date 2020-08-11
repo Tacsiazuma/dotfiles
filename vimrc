@@ -67,6 +67,8 @@ Plugin 'dense-analysis/ale'
 Plugin 'tpope/vim-dispatch'
 " auto pair brackets
 Plugin 'jiangmiao/auto-pairs'
+" close buffer without window
+Plugin 'moll/vim-bbye'
 " buffers as tabs
 Plugin 'vim-airline/vim-airline'
 " airline themes
@@ -217,6 +219,10 @@ autocmd FileType javascript,css,java nmap <silent> <Leader>, <Plug>(cosco-commaO
 " cycle through buffers
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+" ==============================================
+" BBye config
+" ==============================================
+nnoremap <Leader>q :Bdelete<CR>
 " ==============================================
 " Auto pairs config
 " ==============================================
