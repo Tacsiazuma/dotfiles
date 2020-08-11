@@ -54,7 +54,7 @@ Plugin 'liuchengxu/vista.vim'
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree'
-Plugin 'idanarye/vim-vebugger'
+Plugin 'brookhong/jdb.vim'
 " git plugin
 Plugin 'tpope/vim-fugitive'
 " see registers before using them
@@ -70,7 +70,7 @@ Plugin 'vim-airline/vim-airline'
 " airline themes
 Plugin 'vim-airline/vim-airline-themes'
 " testing plugin
-Plugin 'janko/vim-test'
+Plugin 'vim-test/vim-test'
 " semicolon and colon addition to the end of the lines, etc.
 Plugin 'lfilho/cosco.vim'
 Plugin 'tpope/vim-commentary'
@@ -129,7 +129,7 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
 " vim test to run with maven toggles
-nnoremap <C-t> :TestFile -DfailIfNoTests=false -am -q<CR>
+nnoremap <C-t> :TestFile <CR>
 " buftabline helpers
 set hidden
 
@@ -142,13 +142,13 @@ function! MavenTest(cmd) abort
     endif
 endfunction
 
-let g:test#custom_transformations = {
-            \ 'maven_integration_aware_test': function('MavenTest')
-            \ }
-let g:test#transformation = 'maven_integration_aware_test'
+" let g:test#custom_transformations = {
+"             \ 'maven_integration_aware_test': function('MavenTest')
+"             \ }
+" let g:test#transformation = 'maven_integration_aware_test'
 
 " vim-test config
-let test#strategy = "dispatch"
+" let test#strategy = "dispatch"
 
 " ==============================================
 " nerdtree config
@@ -158,6 +158,9 @@ let g:NERDTreeChDirMode = 2
 "open nerdtree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+
+nnoremap <leader>t :NERDTreeFind<CR>
 " ==============================================
 " undotree   config
 " ==============================================
