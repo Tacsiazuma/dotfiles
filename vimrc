@@ -141,7 +141,9 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
 " vim test to run with maven toggles
-nnoremap <C-t> :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
+nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true <CR>
+command! -nargs=* -bar IntegrationTest call test#run('integration', split(<q-args>))
+nnoremap <silent><leader>itf :IntegrationTest -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
 " buftabline helpers
 set hidden
 
@@ -163,7 +165,6 @@ let g:NERDTreeChDirMode = 2
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-nnoremap <leader>t :NERDTreeFind<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 " ==============================================
 " undotree   config
@@ -312,14 +313,8 @@ let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools
 " vebugger config
 " ==============================================
 let g:vebugger_leader='<leader>d'
-" ==============================================
-" CtrlP config
-" ==============================================
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.jar
 
-let g:ctrlp_custom_ignore = {
-            \ 'dir': '\v[\/](\.(git|hg|svn)|Pictures|node_modules|Downloads|Movies|Videos|target)$',
-            \ 'file': '\v\.(png|gif|jpg|wav|torrent|flv|zip|exe|so|dll|class|jar)$',
-            \ 'link': 'some_bad_symbolic_links'
-            \}
-let g:ctrlp_max_files=10000
+" ==============================================
+" vimrc edit config
+" ==============================================
+nnoremap <silent> <leader>vr :e /home/tacsiazuma/.vimrc<CR>
