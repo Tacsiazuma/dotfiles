@@ -141,7 +141,7 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
 " vim test to run with maven toggles
-nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true <CR>
+nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend <CR>
 command! -nargs=* -bar IntegrationTest call test#run('integration', split(<q-args>))
 nnoremap <silent><leader>itf :IntegrationTest -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
 " buftabline helpers
