@@ -30,7 +30,7 @@ nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>l :wincmd l<CR>
 " terminal escape
-tnoremap <Esc> <C-\><C-n>
+tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 " spell checking hungarian
 augroup markdownSpell
     autocmd!
@@ -53,8 +53,10 @@ Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 Plugin 'liuchengxu/vista.vim'
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+" file tree
 Plugin 'preservim/nerdtree'
-Plugin 'idanarye/vim-vebugger'
+" java debugging
+Plugin 'brookhong/jdb.vim'
 " git plugin
 Plugin 'tpope/vim-fugitive'
 " git merge plugin
@@ -73,6 +75,8 @@ Plugin 'moll/vim-bbye'
 Plugin 'vim-airline/vim-airline'
 " airline themes
 Plugin 'vim-airline/vim-airline-themes'
+" horizontal jump helper
+Plugin 'unblevable/quick-scope'
 " testing plugin
 Plugin 'vim-test/vim-test'
 " semicolon and colon addition to the end of the lines, etc.
@@ -81,18 +85,22 @@ Plugin 'tpope/vim-commentary'
 " vim practice plugin
 Plugin 'ThePrimeagen/vim-be-good'
 " fuzzy finder
-Plugin 'kien/ctrlp.vim'
+"Plugin 'kien/ctrlp.vim'
 " markdown preview
 Plugin 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 " git changes
 Plugin 'airblade/vim-gitgutter'
-" vim search in files
-Plugin 'mileszs/ack.vim'
-" java debugging
+" java stuff
 Plugin 'tacsiazuma/easyjava.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'Shougo/vimproc.vim'
+" vim leader key mapping helper
+Plugin 'liuchengxu/vim-which-key'
+" undo local changes
 Plugin 'mbbill/undotree'
+" FZF integration
+Plugin 'junegunn/fzf', { 'do': './install --bin' }
+Plugin 'junegunn/fzf.vim'
 " if you want ultisnips to be synced by dotfiles, create a symlink from
 " .ultisnips to .vim/UltiSnips because we cant read outside the .vim directory
 "Plugin 'SirVer/ultisnips'
@@ -133,7 +141,9 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
 " vim test to run with maven toggles
-nnoremap <C-t> :TestFile -DfailIfNoTests=false -am -q<CR>
+nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true <CR>
+command! -nargs=* -bar IntegrationTest call test#run('integration', split(<q-args>))
+nnoremap <silent><leader>itf :IntegrationTest -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
 " buftabline helpers
 set hidden
 
@@ -146,14 +156,6 @@ function! MavenTest(cmd) abort
     endif
 endfunction
 
-let g:test#custom_transformations = {
-            \ 'maven_integration_aware_test': function('MavenTest')
-            \ }
-let g:test#transformation = 'maven_integration_aware_test'
-
-" vim-test config
-let test#strategy = "dispatch"
-
 " ==============================================
 " nerdtree config
 " ==============================================
@@ -162,6 +164,8 @@ let g:NERDTreeChDirMode = 2
 "open nerdtree automatically
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+nnoremap <leader>n :NERDTreeToggle<CR>
 " ==============================================
 " undotree   config
 " ==============================================
@@ -224,14 +228,78 @@ nnoremap <S-Tab> :bprevious<CR>
 " ==============================================
 nnoremap <Leader>q :Bdelete<CR>
 " ==============================================
+" vim which key config
+" ==============================================
+nnoremap <silent> <leader> :silent WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
+" Create map to add keys to
+let g:which_key_map =  {}
+" Define a separator
+let g:which_key_sep = '→'
+" set timeoutlen=100
+
+
+" Not a fan of floating windows for this
+let g:which_key_use_floating_win = 0
+
+" Change the colors if you want
+highlight default link WhichKey          Operator
+highlight default link WhichKeySeperator DiffAdded
+highlight default link WhichKeyGroup     Identifier
+highlight default link WhichKeyDesc      Function
+
+" Hide status line
+autocmd! FileType which_key
+autocmd  FileType which_key set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
+" ==============================================
 " Auto pairs config
 " ==============================================
 let g:AutoPairsMapSpace = 0
 " ==============================================
-" ACK config
+" FZF config
 " ==============================================
-" ACK hotkey
-nnoremap <C-F> :Ack<space>
+nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <leader>b :Buffers<CR>
+nnoremap <C-f> :RG<CR>
+" Border color
+let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
+
+let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline'
+let $FZF_DEFAULT_COMMAND="rg --files --hidden"
+
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+" Ripgrep advanced
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" Git grep
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 " ==============================================
 " ALE config
 " ==============================================
@@ -245,14 +313,8 @@ let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools
 " vebugger config
 " ==============================================
 let g:vebugger_leader='<leader>d'
-" ==============================================
-" CtrlP config
-" ==============================================
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.jar
 
-let g:ctrlp_custom_ignore = {
-            \ 'dir': '\v[\/](\.(git|hg|svn)|Pictures|node_modules|Downloads|Movies|Videos|target)$',
-            \ 'file': '\v\.(png|gif|jpg|wav|torrent|flv|zip|exe|so|dll|class|jar)$',
-            \ 'link': 'some_bad_symbolic_links'
-            \}
-let g:ctrlp_max_files=10000
+" ==============================================
+" vimrc edit config
+" ==============================================
+nnoremap <silent> <leader>vr :e /home/tacsiazuma/.vimrc<CR>
