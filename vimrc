@@ -56,7 +56,7 @@ Plugin 'VundleVim/Vundle.vim'
 " file tree
 Plugin 'preservim/nerdtree'
 " java debugging
-Plugin 'brookhong/jdb.vim'
+Plugin 'idanarye/vim-vebugger'
 " git plugin
 Plugin 'tpope/vim-fugitive'
 " git merge plugin
@@ -313,8 +313,16 @@ let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools
 " vebugger config
 " ==============================================
 let g:vebugger_leader='<leader>d'
-
+nnoremap <silent> <leader>D :call vebugger#jdb#attach('localhost:8000',{ 'srcpath' : '/home/tacsiazuma/work/videoportal/video-application/src/main/java'}) \| :VBGtoggleTerminalBuffer<cr>
 " ==============================================
 " vimrc edit config
 " ==============================================
 nnoremap <silent> <leader>vr :e /home/tacsiazuma/.vimrc<CR>
+" ==============================================
+" git integration mappings
+" ==============================================
+
+nnoremap <silent> <leader>g :Git<CR>
+nnoremap <silent> <leader>gf :Git fetch --all<CR> " sadface
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gm :Merginal<CR>
