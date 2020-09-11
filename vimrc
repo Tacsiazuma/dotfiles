@@ -8,7 +8,7 @@ set relativenumber
 let mapleader=' '
 set guifont=Hack:h20
 set nobackup
-set colorcolumn=121
+set colorcolumn=120
 set noswapfile
 set nowritebackup
 set cmdheight=2
@@ -143,7 +143,7 @@ let g:vista_default_executive = 'coc'
 " vim test to run with maven toggles
 nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true <CR>
 command! -nargs=* -bar IntegrationTest call test#run('integration', split(<q-args>))
-nnoremap <silent><leader>itf :IntegrationTest -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
+nnoremap <silent><leader>itf :IntegrationTest -q -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
 " buftabline helpers
 set hidden
 
@@ -181,7 +181,6 @@ let g:airline#extensions#tabline#enabled = 1
 " format selected buffer
 command! -nargs=0 Format :call CocAction('format')<Paste>
 " format selected section
-"xmap <leader>f  <Plug>(coc-format-selected)<CR>
 nmap <leader>rn  <Plug>(coc-rename)<CR>
 nmap <leader>f  <Plug>(coc-format)<CR>
 " Applying codeAction to the selected region.
@@ -317,4 +316,4 @@ let g:vebugger_leader='<leader>d'
 " ==============================================
 " vimrc edit config
 " ==============================================
-nnoremap <silent> <leader>vr :e /home/tacsiazuma/.vimrc<CR>
+nnoremap <silent> <leader>vr :e $HOME/.vimrc<CR>
