@@ -2,6 +2,7 @@ set nocompatible              " be
 syntax enable
 " turn on linenumbers
 set number
+set encoding=UTF-8
 set ttimeout
 set ttimeoutlen=100
 set relativenumber
@@ -56,7 +57,9 @@ Plugin 'VundleVim/Vundle.vim'
 " file tree
 Plugin 'preservim/nerdtree'
 " java debugging
-Plugin 'brookhong/jdb.vim'
+Plugin 'idanarye/vim-vebugger'
+" dev icons for nerdtree
+Plugin 'ryanoasis/vim-devicons'
 " git plugin
 Plugin 'tpope/vim-fugitive'
 " git merge plugin
@@ -141,7 +144,7 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_default_executive = 'coc'
 " =====================================================
 " vim test to run with maven toggles
-nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true <CR>
+nnoremap <silent><leader>tf :TestFile -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend <CR>
 command! -nargs=* -bar IntegrationTest call test#run('integration', split(<q-args>))
 nnoremap <silent><leader>itf :IntegrationTest -q -Dtest=foo -DfailIfNoTests=false -am -Dskip.npm -Dpmd.skip=true -Dcheckstyle.skip=true -Pnofrontend<CR>
 " buftabline helpers
@@ -312,8 +315,18 @@ let g:ale_java_checkstyle_config= '/home/tacsiazuma/work/videoportal/build-tools
 " vebugger config
 " ==============================================
 let g:vebugger_leader='<leader>d'
-
+nnoremap <silent> <leader>D :call vebugger#jdb#attach('localhost:8000',{ 'srcpath' : '/home/tacsiazuma/work/videoportal/video-application/src/main/java'}) \| :VBGtoggleTerminalBuffer<cr>
 " ==============================================
 " vimrc edit config
 " ==============================================
 nnoremap <silent> <leader>vr :e $HOME/.vimrc<CR>
+" ==============================================
+" git integration mappings
+" ==============================================
+
+nnoremap <silent> <leader>g :Git<CR>
+nnoremap <silent> <leader>gl :Git log<CR>
+nnoremap <silent> <leader>gf :Git fetch --all<CR> " sadface
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gm :Merginal<CR>
+
